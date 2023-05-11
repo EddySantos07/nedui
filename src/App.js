@@ -1,3 +1,7 @@
+import { useState, useEffect } from "react";
+
+import useFetchData from "./dashboard/API/api_call";
+
 import BasicCard from "./dashboard/financing-options/financing-options";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
@@ -14,20 +18,26 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function App() {
+  const [jsonValues, setState] = useState([ {defaultProp:""} ]);
+
+  useEffect(() => {
+    async function Wait() {
+      let result = await useFetchData();
+      
+      setState(result);
+    }
+    Wait();
+  }, []);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={6} >
-          <BasicCard />
-        </Grid>
         <Grid item xs={6}>
-          <BasicCard />
+          <BasicCard jsonValues={jsonValues} />
         </Grid>
+
         <Grid item xs={6}>
-          <Item>3</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <Item>4</Item>
+          {/* <BasicCard /> */}
         </Grid>
       </Grid>
     </Box>

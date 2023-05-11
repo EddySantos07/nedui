@@ -1,6 +1,4 @@
 import * as React from "react";
-import { useState } from 'react';
-
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -13,13 +11,12 @@ import FilledInput from "@mui/material/FilledInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 
+import LinearProgress from '@mui/material/LinearProgress';
+
 import TextField from "@mui/material/TextField";
 
 import Slider from "@mui/material/Slider";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import LoadingBasicCard from "../loading-financing-options/loading-financing-options";
-
-import revenue_share_percentage from "./utils/revenue_share_percentage";
 
 const bull = (
   <Box
@@ -30,27 +27,8 @@ const bull = (
   </Box>
 );
 
-export default function BasicCard(jsonValues) {
-  console.log(
-    jsonValues.jsonValues,
-    "json"
-    // searhJsonValues(jsonValues.jsonValues, "revenue_amount"),
-    // "???"
-  );
-
-  let [currentLoanAmount, setLoanAmount] = useState(0);
-
-  const company_info_array = jsonValues.jsonValues;
-
-  if (jsonValues.jsonValues[0].defaultProp === "") {
-    return <LoadingBasicCard />;
-  }
-
-  let revenue_amount_display_max = (Math.trunc(Math.floor(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, ''))) / 3)).toLocaleString("en-US");
-  let revenue_amount_number_max = (Math.trunc(Math.floor(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, ''))) / 3));
-
-  console.log(revenue_amount_display_max , "slicee" )
-
+export default function LoadingBasicCard(jsonValues) {
+    console.log("called loading")
   return (
     <Card>
       <CardContent>
@@ -71,46 +49,22 @@ export default function BasicCard(jsonValues) {
           }}
         >
           {" "}
-          <AttachMoneyIcon />{" "}
-          {
-            searhJsonValues(company_info_array, "revenue_amount").placeholder
-          }{" "}
+          <AttachMoneyIcon /> < LinearProgress/> {" "}
         </div>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           What is your desired loan amount?
         </Typography>
 
-        <div>
-          <div>
-            {" "}
-            <AttachMoneyIcon />
-            {
-              searhJsonValues(company_info_array, "funding_amount_min").value
-            }{" "}
-          </div>
-          <div>
-            {" "}
-            <AttachMoneyIcon />
-            {
-              revenue_amount_display_max
-            }{" "}
-          </div>
-        </div>
-
         <Slider
           size="small"
-          defaultValue={0}
-          step={2}
-          // aria-label="Small"
+          // defaultValue={70}
+          aria-label="Small"
           // valueLabelDisplay="auto"
-          onChange={(e, value) => setLoanAmount(value)}
-          max={ revenue_amount_number_max}
-          min={ Number(searhJsonValues(company_info_array, "funding_amount_min").value)}
         />
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Revenue share percentage: { revenue_share_percentage(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, '')) , 1 ) }
+          Revenue share percentage:
         </Typography>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -140,20 +94,3 @@ export default function BasicCard(jsonValues) {
     </Card>
   );
 }
-
-function searhJsonValues(array, name) {
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].name === name) {
-      return array[i];
-    }
-  }
-}
-
-const NumberFormatter = (value, decimal) => {
-  return parseFloat(parseFloat(value).toFixed(decimal)).toLocaleString(
-    "en-IN",
-    {
-      useGrouping: true,
-    }
-  );
-};

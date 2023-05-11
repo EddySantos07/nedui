@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 
-const fetchData = () => {
+const useFetchData = async function () {
   //   const [githubData, setGithubData] = useState([]);
 
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
-
-  return fetch(
+  const response = await fetch(
     `https://raw.githubusercontent.com/Ned-Helps/demo-repository/main/config.json`
-  )
-    .then((response) => response.json())
-    .then((data) => setGithubData(data));
+  );
+  const data = await response.json();
+  return data;
 };
 
-export default fetchData;
+export default useFetchData;
