@@ -65,6 +65,17 @@ export default function BasicCard(jsonValues) {
     ) / 3
   );
 
+  let funding_amount_min = Math.trunc(
+    Math.floor(
+      Number(
+        searhJsonValues(company_info_array, "funding_amount_min").value.replace(
+          /,/g,
+          ""
+        )
+      )
+    )
+  ).toLocaleString("en-US");
+
   console.log(revenue_amount_display_max, "slicee");
 
   return (
@@ -101,9 +112,7 @@ export default function BasicCard(jsonValues) {
           <div>
             {" "}
             <AttachMoneyIcon />
-            {
-              searhJsonValues(company_info_array, "funding_amount_min").value
-            }{" "}
+            {funding_amount_min}{" "}
           </div>
           <div>
             {" "}
