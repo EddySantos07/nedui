@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -37,7 +37,6 @@ export default function BasicCard(jsonValues) {
     // searhJsonValues(jsonValues.jsonValues, "revenue_amount"),
     // "???"
   );
-
   let [currentLoanAmount, setLoanAmount] = useState(0);
 
   const company_info_array = jsonValues.jsonValues;
@@ -46,10 +45,27 @@ export default function BasicCard(jsonValues) {
     return <LoadingBasicCard />;
   }
 
-  let revenue_amount_display_max = (Math.trunc(Math.floor(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, ''))) / 3)).toLocaleString("en-US");
-  let revenue_amount_number_max = (Math.trunc(Math.floor(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, ''))) / 3));
+  let revenue_amount_display_max = Math.trunc(
+    Math.floor(
+      Number(
+        searhJsonValues(company_info_array, "revenue_amount")
+          .placeholder.slice(1)
+          .replace(/,/g, "")
+      )
+    ) / 3
+  ).toLocaleString("en-US");
 
-  console.log(revenue_amount_display_max , "slicee" )
+  let revenue_amount_number_max = Math.trunc(
+    Math.floor(
+      Number(
+        searhJsonValues(company_info_array, "revenue_amount")
+          .placeholder.slice(1)
+          .replace(/,/g, "")
+      )
+    ) / 3
+  );
+
+  console.log(revenue_amount_display_max, "slicee");
 
   return (
     <Card>
@@ -92,9 +108,7 @@ export default function BasicCard(jsonValues) {
           <div>
             {" "}
             <AttachMoneyIcon />
-            {
-              revenue_amount_display_max
-            }{" "}
+            {revenue_amount_display_max}{" "}
           </div>
         </div>
 
@@ -105,12 +119,22 @@ export default function BasicCard(jsonValues) {
           // aria-label="Small"
           // valueLabelDisplay="auto"
           onChange={(e, value) => setLoanAmount(value)}
-          max={ revenue_amount_number_max}
-          min={ Number(searhJsonValues(company_info_array, "funding_amount_min").value)}
+          max={revenue_amount_number_max}
+          min={Number(
+            searhJsonValues(company_info_array, "funding_amount_min").value
+          )}
         />
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Revenue share percentage: { revenue_share_percentage(Number(searhJsonValues(company_info_array, "revenue_amount").placeholder.slice(1).replace(/,/g, '')) , 1 ) }
+          Revenue share percentage:{" "}
+          {revenue_share_percentage(
+            Number(
+              searhJsonValues(company_info_array, "revenue_amount")
+                .placeholder.slice(1)
+                .replace(/,/g, "")
+            ),
+            currentLoanAmount
+          )}
         </Typography>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
