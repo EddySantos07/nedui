@@ -19,6 +19,15 @@ import Slider from "@mui/material/Slider";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import LoadingBasicCard from "../loading-financing-options/loading-financing-options";
 
+import { styled } from "@mui/material/styles";
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+
+import Grid from "@mui/material/Grid";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 import revenue_share_percentage from "./utils/revenue_share_percentage";
 
 const bull = (
@@ -147,15 +156,103 @@ export default function BasicCard(jsonValues) {
         </Typography>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Revenue Shared Frequency
+          <Box sx={{ width: "100%" }}>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 1, md: 1 }}
+            >
+              <Grid item xs={6}>
+                Revenue Shared Frequency
+              </Grid>
+              <Grid item xs={6}>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-form-control-label-placement"
+                  name="position"
+                  defaultValue="top"
+                >
+                  <FormControlLabel
+                    value="start"
+                    control={<Radio />}
+                    label="Monthly"
+                    labelPlacement="start"
+                  />
+
+                  <FormControlLabel
+                    value="end"
+                    control={<Radio />}
+                    label="Weekly"
+                    labelPlacement="start"
+                  />
+                </RadioGroup>
+              </Grid>
+            </Grid>
+          </Box>
         </Typography>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Desired Repayment Delay
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
+          >
+            <Grid item xs={6}>
+              Desired Repayment Delay
+            </Grid>
+
+            <Grid item xs={6} component={"span"}>
+              <Select
+                // labelId="demo-simple-select-label"
+                // id="demo-simple-select"
+                value={""}
+                label="Age"
+                // onChange={handleChange}
+              >
+                {getValuesFromStarDelimiter(
+                  searhJsonValues(company_info_array, "desired_repayment_delay")
+                    .value
+                ).map((element) => {
+                  return <MenuItem value={element}> {element} </MenuItem>;
+                })}
+              </Select>
+            </Grid>
+          </Grid>
         </Typography>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           What will you use the funds for?
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={1}>
+              <Grid xs>
+                <Select
+                  // labelId="demo-simple-select-label"
+                  // id="demo-simple-select"
+                  value={""}
+                  label="Age"
+                  // onChange={handleChange}
+                >
+                  {getValuesFromStarDelimiter(
+                    searhJsonValues(company_info_array, "use_of_funds").value
+                  ).map((element) => {
+                    return <MenuItem value={element}> {element} </MenuItem>;
+                  })}
+                </Select>
+              </Grid>
+              <Grid xs>y</Grid>
+              <Grid xs>
+                
+              </Grid>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel>Select an option</InputLabel>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </Typography>
 
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -172,6 +269,30 @@ export default function BasicCard(jsonValues) {
       </CardActions>
     </Card>
   );
+}
+
+const StyledFormControlLabel = styled((props) => (
+  <FormControlLabel {...props} />
+))(({ theme, checked }) => ({
+  ".MuiFormControlLabel-label": checked && {
+    color: theme.palette.primary.main,
+  },
+}));
+
+function getValuesFromStarDelimiter(value) {
+  return value.split("*");
+}
+
+function MyFormControlLabel(props) {
+  const radioGroup = useRadioGroup();
+
+  let checked = false;
+
+  if (radioGroup) {
+    checked = radioGroup.value === props.value;
+  }
+
+  return <StyledFormControlLabel checked={checked} {...props} />;
 }
 
 function searhJsonValues(array, name) {
