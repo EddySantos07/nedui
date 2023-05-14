@@ -27,6 +27,7 @@ import Radio from "@mui/material/Radio";
 import Grid from "@mui/material/Grid";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import revenue_share_percentage from "./utils/revenue_share_percentage";
 
@@ -47,12 +48,17 @@ export default function BasicCard(jsonValues) {
     // "???"
   );
   let [currentLoanAmount, setLoanAmount] = useState(0);
+  let [useOfFunds, setUseOfFunds] = useState([]);
 
   const company_info_array = jsonValues.jsonValues;
 
   if (jsonValues.jsonValues[0].defaultProp === "") {
     return <LoadingBasicCard />;
   }
+
+  const insertNewUseOfFunds = function (newUseOfFunds) {
+    setUseOfFunds(useOfFunds => [...useOfFunds,newUseOfFunds ]);
+  };
 
   let revenue_amount_display_max = Math.trunc(
     Math.floor(
@@ -93,6 +99,7 @@ export default function BasicCard(jsonValues) {
         <Typography variant="h6" component="div">
           Financing Options
         </Typography>
+
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           What is your annual business revenue?
         </Typography>
@@ -155,41 +162,43 @@ export default function BasicCard(jsonValues) {
           )}
         </Typography>
 
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          <Box sx={{ width: "100%" }}>
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            >
-              <Grid item xs={6}>
-                Revenue Shared Frequency
-              </Grid>
-              <Grid item xs={6}>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-form-control-label-placement"
-                  name="position"
-                  defaultValue="top"
-                >
-                  <FormControlLabel
-                    value="start"
-                    control={<Radio />}
-                    label="Monthly"
-                    labelPlacement="start"
-                  />
-
-                  <FormControlLabel
-                    value="end"
-                    control={<Radio />}
-                    label="Weekly"
-                    labelPlacement="start"
-                  />
-                </RadioGroup>
-              </Grid>
+        <Box sx={{ width: "100%" }}>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
+          >
+            <Grid item xs={6}>
+              Revenue Shared Frequency
             </Grid>
-          </Box>
-        </Typography>
+            <Grid item xs={6}>
+              <RadioGroup
+                row
+                aria-labelledby="demo-form-control-label-placement"
+                name="position"
+                defaultValue="top"
+              >
+                <FormControlLabel
+                  value="start"
+                  control={<Radio />}
+                  label="Monthly"
+                  labelPlacement="start"
+                />
+
+                <FormControlLabel
+                  value="end"
+                  control={<Radio />}
+                  label="Weekly"
+                  labelPlacement="start"
+                />
+              </RadioGroup>
+            </Grid>
+
+            <Grid item xs={6}>
+              Revenue Shared Frequency
+            </Grid>
+          </Grid>
+        </Box>
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           <Grid
@@ -222,47 +231,96 @@ export default function BasicCard(jsonValues) {
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           What will you use the funds for?
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={1}>
-              <Grid xs>
-                <Select
-                  // labelId="demo-simple-select-label"
-                  // id="demo-simple-select"
-                  value={""}
-                  label="Age"
-                  // onChange={handleChange}
-                >
-                  {getValuesFromStarDelimiter(
-                    searhJsonValues(company_info_array, "use_of_funds").value
-                  ).map((element) => {
-                    return <MenuItem value={element}> {element} </MenuItem>;
-                  })}
-                </Select>
-              </Grid>
-              <Grid xs>y</Grid>
-              <Grid xs>
-                
-              </Grid>
+        </Typography>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Select an option</InputLabel>
-                  </FormControl>
+        <Grid container spacing={2} columns={0}>
+          <Grid item>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={1}>
+                <Grid xs>
+                  <Select
+                    // labelId="demo-simple-select-label"
+                    // id="demo-simple-select"
+                    value={""}
+                    label="Age"
+                    // onChange={handleChange}
+                  >
+                    {getValuesFromStarDelimiter(
+                      searhJsonValues(company_info_array, "use_of_funds").value
+                    ).map((element) => {
+                      return <MenuItem value={element}> {element} </MenuItem>;
+                    })}
+                  </Select>
+                </Grid>
+
+                <Grid xs>
+                  <TextField
+                    id="outlined-basic"
+                    label="Description"
+                    variant="outlined"
+                  />
+                </Grid>
+
+                <Grid xs>
+                  <Grid
+                    container
+                    rowSpacing={1}
+                    columnSpacing={{ xs: 3, sm: 3, md: 3 }}
+                  >
+                    <Grid item xs={6}>
+                      <TextField
+                        type="number"
+                        id="outlined-basic"
+                        label="Amount"
+                        variant="outlined"
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <AddCircleOutlineIcon
+                        onClick={() => {
+                          console.log("pressed!!!");
+                          insertNewUseOfFunds();
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        </Typography>
+            </Box>
+          </Grid>
 
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
-        </Typography>
-        <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile "'}
-        </Typography>
+          {useOfFunds.map(function (element) {
+            console.log(element, "in the funds!")
+            return (
+              <Grid item>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Grid container spacing={1}>
+                    <Grid xs>
+                      <Box component="div">
+                        Lorem Ipsum has been the industry&apos;s standard dummy
+                        text ever since the 1500s.
+                      </Box>
+                    </Grid>
+
+                    <Grid xs>
+                      <Box component="div">
+                        Lorem Ipsum has been the industry&apos;s standard dummy
+                        text ever since the 1500s.
+                      </Box>
+                    </Grid>
+
+                    <Grid xs>
+                      <Box component="div">
+                        Lorem Ipsum has been the industry&apos;s standard dummy
+                        text ever since the 1500s.
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+            );
+          })}
+        </Grid>
       </CardContent>
       <CardActions>
         <Button size="small">Learn More</Button>
