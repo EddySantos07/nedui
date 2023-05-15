@@ -41,14 +41,15 @@ const bull = (
 );
 
 export default function BasicCard(jsonValues) {
-  console.log(
-    jsonValues.jsonValues,
-    "json"
-    // searhJsonValues(jsonValues.jsonValues, "revenue_amount"),
-    // "???"
-  );
+  // console.log(
+  //   jsonValues.jsonValues,
+  //   "json"
+  //   // searhJsonValues(jsonValues.jsonValues, "revenue_amount"),
+  //   // "???"
+  // );
   let [currentLoanAmount, setLoanAmount] = useState(0);
   let [useOfFunds, setUseOfFunds] = useState([]);
+  let [useOfFundsDropdown, setUseOfFundsDropdown] = useState("");
 
   const company_info_array = jsonValues.jsonValues;
 
@@ -56,8 +57,20 @@ export default function BasicCard(jsonValues) {
     return <LoadingBasicCard />;
   }
 
-  const insertNewUseOfFunds = function (newUseOfFunds) {
-    setUseOfFunds(useOfFunds => [...useOfFunds,newUseOfFunds ]);
+  const handleUseOfFundsChange = function (e) {
+    setUseOfFundsDropdown(e.target.value);
+  };
+
+  const insertNewUseOfFunds = function (e) {
+    e.preventDefault();
+
+    let use_of_funds = useOfFundsDropdown;
+    let description = e.target.Description.value;
+    let amount = e.target.Amount.value;
+
+    let newUseOfFunds = { use_of_funds, description, amount };
+
+    setUseOfFunds((useOfFunds) => [...useOfFunds, newUseOfFunds]);
   };
 
   let revenue_amount_display_max = Math.trunc(
@@ -236,84 +249,91 @@ export default function BasicCard(jsonValues) {
         <Grid container spacing={2} columns={0}>
           <Grid item>
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={1}>
-                <Grid xs>
-                  <Select
-                    // labelId="demo-simple-select-label"
-                    // id="demo-simple-select"
-                    value={""}
-                    label="Age"
-                    // onChange={handleChange}
-                  >
-                    {getValuesFromStarDelimiter(
-                      searhJsonValues(company_info_array, "use_of_funds").value
-                    ).map((element) => {
-                      return <MenuItem value={element}> {element} </MenuItem>;
-                    })}
-                  </Select>
-                </Grid>
+              <form
+                onSubmit={(e) => {
+                  insertNewUseOfFunds(e);
+                }}
+              >
+                <Grid container spacing={1}>
+                  <Grid xs>
+                    <Select
+                      // labelId="use_of_funds"
+                      id="Use_of_funds"
+                      value={useOfFundsDropdown}
+                      label="use_of_funds"
+                      onChange={handleUseOfFundsChange}
+                    >
+                      {getValuesFromStarDelimiter(
+                        searhJsonValues(company_info_array, "use_of_funds")
+                          .value
+                      ).map((element) => {
+                        return <MenuItem value={element}> {element} </MenuItem>;
+                      })}
+                    </Select>
+                  </Grid>
 
-                <Grid xs>
-                  <TextField
-                    id="outlined-basic"
-                    label="Description"
-                    variant="outlined"
-                  />
-                </Grid>
+                  <Grid xs>
+                    <TextField
+                      id="Description"
+                      label="Description"
+                      variant="outlined"
+                    />
+                  </Grid>
 
-                <Grid xs>
-                  <Grid
-                    container
-                    rowSpacing={1}
-                    columnSpacing={{ xs: 3, sm: 3, md: 3 }}
-                  >
-                    <Grid item xs={6}>
-                      <TextField
-                        type="number"
-                        id="outlined-basic"
-                        label="Amount"
-                        variant="outlined"
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <AddCircleOutlineIcon
-                        onClick={() => {
-                          console.log("pressed!!!");
-                          insertNewUseOfFunds();
-                        }}
-                      />
+                  <Grid xs>
+                    <Grid
+                      container
+                      rowSpacing={1}
+                      columnSpacing={{ xs: 3, sm: 3, md: 3 }}
+                    >
+                      <Grid item xs={6}>
+                        <TextField
+                          type="number"
+                          id="Amount"
+                          label="Amount"
+                          variant="outlined"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <button
+                          style={{
+                            background: "none",
+                            color: "inherit",
+                            border: "none",
+                          }}
+                        >
+                          <AddCircleOutlineIcon
+                            role="button"
+                            type="submit"
+                            onClick={() => {
+                              console.log("pressed!!!");
+                            }}
+                          />
+                        </button>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
+              </form>
             </Box>
           </Grid>
 
           {useOfFunds.map(function (element) {
-            console.log(element, "in the funds!")
+            console.log(element, "in the funds!");
             return (
               <Grid item>
                 <Box sx={{ flexGrow: 1 }}>
                   <Grid container spacing={1}>
                     <Grid xs>
-                      <Box component="div">
-                        Lorem Ipsum has been the industry&apos;s standard dummy
-                        text ever since the 1500s.
-                      </Box>
+                      <Box component="div">{element.use_of_funds}</Box>
                     </Grid>
 
                     <Grid xs>
-                      <Box component="div">
-                        Lorem Ipsum has been the industry&apos;s standard dummy
-                        text ever since the 1500s.
-                      </Box>
+                      <Box component="div">{element.description}</Box>
                     </Grid>
 
                     <Grid xs>
-                      <Box component="div">
-                        Lorem Ipsum has been the industry&apos;s standard dummy
-                        text ever since the 1500s.
-                      </Box>
+                      <Box component="div">{element.amount}</Box>
                     </Grid>
                   </Grid>
                 </Box>
