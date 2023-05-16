@@ -153,7 +153,7 @@ export default function BasicCard(jsonValues) {
         <Slider
           size="small"
           defaultValue={0}
-          step={2}
+          step={1}
           // aria-label="Small"
           // valueLabelDisplay="auto"
           onChange={(e, value) => setLoanAmount(value)}
