@@ -20,12 +20,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function App() {
-  const [jsonValues, setState] = useState([ {defaultProp:""} ]);
+  const [jsonValues, setState] = useState([{ defaultProp: "" }]);
 
   useEffect(() => {
     async function Wait() {
       let result = await useFetchData();
-      
+
       setState(result);
     }
     Wait();
@@ -34,15 +34,8 @@ function App() {
   return (
     <Box sx={{ width: "100%" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={6}>
-          {/* <BasicCard jsonValues={jsonValues} /> */}
-          < X jsonValues={jsonValues}/>
-        </Grid>
-
-        <Grid item xs={6}>
-          {/* <BasicCard /> */}
-          < Results jsonValues={jsonValues} />
-        </Grid>
+        {/* <BasicCard jsonValues={jsonValues} /> */}
+        <X jsonValues={jsonValues} />
       </Grid>
     </Box>
   );

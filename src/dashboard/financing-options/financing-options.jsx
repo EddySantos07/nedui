@@ -320,7 +320,7 @@ export default function BasicCard(jsonValues) {
 
           {useOfFunds.map(function (element) {
             console.log(element, "in the funds!");
-            return (
+            return (<>
               <Grid item>
                 <Box sx={{ flexGrow: 1 }}>
                   <Grid container spacing={1}>
@@ -338,6 +338,7 @@ export default function BasicCard(jsonValues) {
                   </Grid>
                 </Box>
               </Grid>
+              </>
             );
           })}
         </Grid>
